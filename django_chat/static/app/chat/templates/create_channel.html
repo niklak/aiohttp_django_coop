@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="text-center"><span class="text-primary">Create channel</span>
+        </h2>
+    </div>
+    <div class="col-md-6 col-md-offset-3">
+        <form data-ng-submit="create_channel()">
+
+            <table class="table text-primary">
+                <tr>
+                    <td><b>title</b></td>
+                    <td>
+                        <input class="form-control input-sm" type="text" data-ng-model="channel.title" required>
+                        <p class="text-danger" data-ng-repeat="e in error.title">{{ e }}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>topic</td>
+                    <td>
+                        <input class="form-control input-sm" type="text" data-ng-model="channel.topic">
+                        <p class="text-danger" data-ng-repeat="e in error.topic">{{ e }}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input class="btn btn-default" type="submit" value="create"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>

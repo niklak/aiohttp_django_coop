@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-md-2">
+        <h2 class="text-right"><b>ONLINE</b></h2>
+    </div>
+    <div class="col-md-9">
+        <h1 class="text-center" id="channel" data-title="{{ channel.title }}">
+            Channel # <span class="text-primary">{{ channel.title }}</span>
+        </h1>
+        <h3 data-ng-if="channel.topic">Topic: {{ channel.topic }}</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2 text-right" id="user_list">
+        <ul class="list-unstyled">
+            <li class="text-success" data-ng-repeat="user in users"><b>{{ user }}</b></li>
+        </ul>
+    </div>
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-12 bg-success" id="inbox"
+                 style="overflow-y:scroll; height: 400px; padding-top: 5px;">
+                <div class="panel panel-default" data-ng-repeat="message in messages">
+                    <div class="row">
+                        <div class="col-md-3 text-right">
+                            <b class="text-info">{{ message.sender }}:</b>
+                            <p class="small">{{ message.create_date | date:'yyyy-MM-dd HH:mm:ss' }}</p>
+                        </div>
+                        <div class="col-md-9" style="word-wrap: break-word;">
+                            {{ message.text }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" id="input">
+                <p class="text-info">
+                    <h5>You signed as <b class="text-success">{{ auth.username }}</b>
+                (<a data-ng-href="#!/logout/">log out</a>).
+                    <span id="error" class="text-danger"></span>
+                    </h5>
+                </p>
+                <form data-ng-submit="send();">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="input-group">
+                                <input data-ng-model="message" type="text" class="form-control" placeholder="start typing">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">send</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

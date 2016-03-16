@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org" data-ng-app="main">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		{% load static from staticfiles %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<title>Example chat using Django REST Framework, Postgres, Redis, Aiohttp</title>
+	</head>
+	<body>
+		<div data-d-navbar></div>
+        <noscript><h4 class="text-danger">This site requires JavaScript to be enabled</h4></noscript>
+		<div id="content" class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-1 fixed-alerts">
+					<div data-d-alerts></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-10 col-md-offset-2 view-container">
+					<div data-ng-view></div>
+				</div>
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-cookies.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-resource.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.2.4/ui-bootstrap-tpls.min.js"></script>
+        <script src="{{ STATIC_URL }}app/app.js"></script>
+        <script src="{{ STATIC_URL }}app/constants.js"></script>
+        <script src="{{ STATIC_URL }}app/routes.js"></script>
+        <script src="{{ STATIC_URL }}app/chat/services.js"></script>
+        <script src="{{ STATIC_URL }}app/chat/controllers.js"></script>
+        <script src="{{ STATIC_URL }}app/partials/alert/directives.js"></script>
+        <script src="{{ STATIC_URL }}app/partials/auth/services.js"></script>
+        <script src="{{ STATIC_URL }}app/partials/navbar/directives.js"></script>
+	</body>
+</html>

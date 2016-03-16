@@ -1,0 +1,50 @@
+<nav class="navbar navbar-default" data-ng-class="{ 'navbar-shrink': change_class }">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-ng-init="isCollapsed = true"
+                    data-ng-click="isCollapsed = !isCollapsed" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#!/">{{ brand_text }}</a>
+        </div>
+        <div class="collapse navbar-collapse" data-uib-collapse="isCollapsed">
+            <ul class="nav navbar-nav">
+                <li data-uib-dropdown data-is-open="status.isopen" data-ng-if="auth.is_authenticated()">
+                    <a href id="login" class="dropdown-toggle"
+                       role="button" data-uib-dropdown-toggle data-ng-disabled="disabled">Hello, {{ auth.username }}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="login">
+                        <li class="divider"></li>
+                        <li role="menuitem">
+                            <a data-ng-click="logout()" data-ng-href="#!/">
+                                <i class="fa fa-sign-out"></i> log out
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li data-uib-dropdown data-is-open="status.isopen" data-ng-if="!auth.is_authenticated()">
+                    <a href id="sign" class="dropdown-toggle"
+                       role="button" data--uib-dropdown-toggle data-ng-disabled="disabled">Sign
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="sign">
+                        <li role="menuitem">
+                            <a data-ng-click="open()"><i class="fa fa-sign-in"></i> Sign in</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li role="menuitem">
+                            <a data-ng-href="#!/register"><i class="fa fa-user-plus"></i> Sign up</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>

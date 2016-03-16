@@ -1,0 +1,15 @@
+<div class="row">
+    <div class="col-md-6">
+        <p class="text-right"><a class="btn btn-info" href="#!/channels/new/">Start a new channel</a></p>
+        <table class="table table-condensed table-bordered">
+            <tr class="text-center">
+                <td class="text-info"><b>Channel</b></td>
+                <td class="text-info"><b>Started by</b></td>
+            </tr>
+            <tr data-ng-repeat="item in r">
+                <td><a data-ng-href="#!/channels/{{ item.id }}">{{ item.title }}</a></td>
+                <td>{{ item.starter }}</td>
+            </tr>
+        </table>
+    </div>
+</div>

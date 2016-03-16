@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="text-center"><span class="text-primary">Registration form</span>
+        </h2>
+    </div>
+    <div class="col-md-6 col-md-offset-3">
+        <form data-ng-submit="register()">
+            <table class="table text-primary">
+                <tr>
+                    <td>Username:</td>
+                    <td>
+                        <input class="form-control input-sm" type="text" data-ng-model="reg.username" required>
+                        <p class="text-danger" data-ng-repeat="e in error.username">{{ e }}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Password:</td>
+                    <td>
+                        <input class="form-control input-sm" type="password" data-ng-model="reg.password" required>
+                        <p class="text-danger" data-ng-repeat="e in error.password">{{ e }}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Confirm password:</td>
+                    <td>
+                        <input class="form-control input-sm" type="password" data-ng-model="reg.confirm_password" required>
+                        <p class="text-danger" data-ng-repeat="e in error.confirm_password">{{ e }}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input class="btn btn-default" type="submit" value="register"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
