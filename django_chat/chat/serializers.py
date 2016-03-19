@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.password_validation import validate_password as vp
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from . import models
@@ -26,7 +26,7 @@ class BriefChannelSerializer(AbsChannelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    sender = serializers.SerializerMethodField()
+    sender = serializers.SerializerMethodField(read_only=True)
 
     def get_sender(self, obj):
         return obj.sender.username
@@ -46,7 +46,7 @@ class UserSerializer(serializers.ModelSerializer):
         return attrs
 
     def validate_password(self, value):
-        validate_password(value)
+        vp(value)
         return value
 
     def create(self, validated_data):

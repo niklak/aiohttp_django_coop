@@ -1,7 +1,7 @@
 import json
 from aiohttp import web, log
 import logging
-from datetime import datetime
+
 
 async def get_user_by_token(cur, token):
     sql = """SELECT u.id as id, u.username as username, t.key
@@ -11,6 +11,7 @@ async def get_user_by_token(cur, token):
     user_id, username, key = await cur.fetchone()
     assert key == token, 'Bad result'
     return user_id, username
+
 
 async def perform_message(cur, channel_id, user, text):
 
@@ -31,10 +32,9 @@ async def perform_message(cur, channel_id, user, text):
 async def websocket_handler(request):
 
     db = request.app['db']
-    cur = await db.cursor()
     token = request.match_info.get('token')
-    user = await get_user_by_token(cur, token)
-    cur.close()
+    async with db.cursor() as cur:
+        user = await get_user_by_token(cur, token)
     user_id, username = user
 
     channel = request.match_info.get('channel')
@@ -60,9 +60,9 @@ async def websocket_handler(request):
             log.ws_logger.info('MSG: {}'.format(msg))
 
             if msg.tp == web.MsgType.text:
-                cur = await db.cursor()
-                data = await perform_message(cur, channel_id, user, msg.data)
-                cur.close()
+                async with db.cursor() as cur:
+                    data = await perform_message(cur, channel_id,
+                                                 user, msg.data)
                 channel_waiters.broadcast(data)
             elif msg.tp == web.MsgType.error:
                 logging.error('connection closed with exception {}'

@@ -21,22 +21,22 @@ class Channel(models.Model):
     is_closed = models.BooleanField(_('Is closed?'), default=False)
     started_by = models.ForeignKey(User, verbose_name='Started by')
 
-    admin_objects = models.Manager()
-    opened = ActiveChannelManager()
     objects = models.Manager()
+    opened = ActiveChannelManager()
 
     def __str__(self):
         return self.title
 
     class Meta:
-        ordering = ['create_date']
+        ordering = ['id']
         verbose_name = _('Channel')
         verbose_name_plural = _('Channels')
 
 
 class Message(models.Model):
     text = models.TextField(_('Text'), max_length=1000)
-    create_date = models.DateTimeField(_('Date created'), auto_now_add=True)
+    create_date = models.DateTimeField(_('Date created'), auto_now_add=True,
+                                       db_index=True)
     channel = models.ForeignKey(Channel, verbose_name=_('Channel'))
     sender = models.ForeignKey(User, verbose_name='Sender')
 
@@ -47,4 +47,3 @@ class Message(models.Model):
 
 
 post_save.connect(receivers.create_auth_token, sender=User)
-# Create your models here.
