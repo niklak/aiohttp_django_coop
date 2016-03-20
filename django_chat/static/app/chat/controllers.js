@@ -6,14 +6,17 @@ angular.module('chat.controllers', ['chat.services', 'auth.services'])
             $scope.r = Channel.query();
         }
         else{
-            $rootScope.alerts.push({ type: 'warning', msg: 'You need to log in to continue!' });
+            $rootScope.alerts.push({type: 'warning',
+                                    msg: 'You need to log in to continue!' });
             $location.path('access_denied/');
         }
     }
 ])
 .controller('ChannelCtrl', [
-    '$scope', '$rootScope', '$location' ,'$routeParams', '$timeout', 'Channel', 'Message', 'Auth',
-    function($scope, $rootScope, $location, $routeParams, $timeout, Channel, Message, Auth) {
+    '$scope', '$rootScope', '$location' ,'$routeParams',
+    '$timeout', 'Channel', 'Message', 'Auth',
+    function($scope, $rootScope, $location, $routeParams,
+             $timeout, Channel, Message, Auth) {
         if (Auth.is_authenticated()){
             $scope.channel = Channel.get({pk: $routeParams.pk}, function(success){
                 /*After you will implement your own pagination system, you have to add for
@@ -27,7 +30,7 @@ angular.module('chat.controllers', ['chat.services', 'auth.services'])
                 });
 
             });
-            $timeout(function(){scroll_inbox_to_top()}, 1000);
+            $timeout(function(){scroll_inbox()}, 1000);
 
         }
         else{
@@ -35,7 +38,7 @@ angular.module('chat.controllers', ['chat.services', 'auth.services'])
             $location.path('access_denied/');
         }
 
-        function scroll_inbox_to_top(){
+        function scroll_inbox(){
             var inbox = document.getElementById('inbox');
             inbox.scrollTop = inbox.scrollHeight;
         }
@@ -54,7 +57,7 @@ angular.module('chat.controllers', ['chat.services', 'auth.services'])
                     $scope.messages.push(message);
                 }
                 $scope.$apply();
-                scroll_inbox_to_top();
+                scroll_inbox();
             };
             sock.onclose = function(event){
                 console.log(event); // delete in production
@@ -64,8 +67,6 @@ angular.module('chat.controllers', ['chat.services', 'auth.services'])
             };
             return sock;
         };
-
-
 
         $scope.send = function(){
             $scope.sock.send($scope.message);
@@ -77,7 +78,8 @@ angular.module('chat.controllers', ['chat.services', 'auth.services'])
     '$scope', '$rootScope', '$location' , 'Channel', 'Message', 'Auth',
     function($scope, $rootScope, $location, Channel, Message, Auth) {
         if (!Auth.is_authenticated()){
-            $rootScope.alerts.push({ type: 'warning', msg: 'You need to log in to continue!' });
+            $rootScope.alerts.push({type: 'warning',
+                                    msg: 'You need to log in to continue!' });
             $location.path('access_denied/');
         }
         $scope.channel = {};
@@ -87,7 +89,8 @@ angular.module('chat.controllers', ['chat.services', 'auth.services'])
                     $location.path('/');
                 },
             function(error){
-                    $rootScope.alerts.push({ type: 'danger', msg: 'Error was happened!' });
+                    $rootScope.alerts.push({type: 'danger',
+                                            msg: 'Error was happened!' });
                     $scope.error = error.data;
                 }
             );
@@ -108,10 +111,11 @@ angular.module('chat.controllers', ['chat.services', 'auth.services'])
                     $location.path('/');
                 },
                 function(error){
-                    $rootScope.alerts.push({ type: 'danger', msg: 'Error was happened!' });
+                    $rootScope.alerts.push({type: 'danger',
+                                            msg: 'Error was happened!' });
                     $scope.error = error.data;
                 }
             );
         };
     }
-]);;
+]);

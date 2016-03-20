@@ -12,7 +12,7 @@ async def test():
     async with conn.cursor() as cur:
         channel_id = 1
         message = 'Wubba lubba part 2!'
-        token = '37e84ac8cb424ac7dc53a7918cc032d11af4442'
+        token = '37e84ac8cb424ac7dc53a7918cc032d11af4442d'
 
         sql = """SELECT u.id as id, u.username as username
                   FROM auth_user as u INNER JOIN authtoken_token as t
@@ -38,6 +38,3 @@ async def test():
     conn.close()
 loop = asyncio.get_event_loop()
 loop.run_until_complete(test())
-
-# 37e84ac8cb424ac7dc53a7918cc032d11af4442d
-# http://127.0.0.1:8080/1/37e84ac8cb424ac7dc53a7918cc032d11af4442d
