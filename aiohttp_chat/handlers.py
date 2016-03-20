@@ -4,13 +4,11 @@ import logging
 
 
 async def get_user_by_token(cur, token):
-    sql = """SELECT u.id as id, u.username as username, t.key
+    sql = """SELECT u.id, u.username
           FROM auth_user as u INNER JOIN authtoken_token as t
           ON u.id = t.user_id WHERE t.key = %s"""
     await cur.execute(sql, parameters=(token,))
-    user_id, username, key = await cur.fetchone()
-    assert key == token, 'Bad result'
-    return user_id, username
+    return await cur.fetchone()
 
 
 async def perform_message(cur, channel_id, user, text):
@@ -33,9 +31,6 @@ async def websocket_handler(request):
 
     db = request.app['db']
     token = request.match_info.get('token')
-    async with db.cursor() as cur:
-        user = await get_user_by_token(cur, token)
-    user_id, username = user
 
     channel = request.match_info.get('channel')
     channel_id = int(channel)
@@ -49,7 +44,10 @@ async def websocket_handler(request):
 
     channel_waiters.append(ws)
     try:
-        # 1. Send opening message --- e.g. user list
+        async with db.cursor() as cur:
+            user = await get_user_by_token(cur, token)
+        user_id, username = user
+
         count = int(await r.zcount(channel_users))
 
         await r.zadd(channel_users, count+1, username)
@@ -67,6 +65,9 @@ async def websocket_handler(request):
             elif msg.tp == web.MsgType.error:
                 logging.error('connection closed with exception {}'
                               .format(ws.exception()))
+    except TypeError:
+        log.ws_logger.error('Probably bad token is the reason why'
+                            ' you get None instead tuple.', exc_info=True)
     except:
         log.ws_logger.error('ERROR has been happened', exc_info=True)
     finally:
