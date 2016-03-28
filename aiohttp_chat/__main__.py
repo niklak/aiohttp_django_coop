@@ -5,7 +5,7 @@ import aiopg
 from aiohttp import web, log
 from collections import defaultdict
 
-from aiohttp_chat import handlers
+import handlers
 
 # POSTGRES DATABASE CONFIGURATION
 

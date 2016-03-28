@@ -22,7 +22,7 @@ class BriefChannelSerializer(AbsChannelSerializer):
 
     class Meta:
         model = models.Channel
-        fields = ('id', 'title', 'started_by')
+        fields = ('id', 'title', 'starter')
 
 
 class MessageSerializer(serializers.ModelSerializer):
