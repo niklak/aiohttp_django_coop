@@ -18,5 +18,8 @@ For real-time messaging this app. uses aiohttp web-server with one web-socket ha
 1. aioredis 0.2.5
 1. aiopg 0.9.2
 
+### For social auth:
+1. python-social-auth
+
 #### Angularjs app. uses cdn packages (1.5.0) 
 

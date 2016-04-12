@@ -44,8 +44,18 @@ var navbar = angular.module('navbar', ['auth.services'])
 			};
 		}
 	};
+}])
+.directive('socialLink', ['PATH', function(PATH){
+    return {
+        restrict: 'E',
+        replace: true,
+        templateUrl: PATH +'partials/navbar/social.html',
+        scope: {backend:'=', icon:'='},
+        link: function($scope, element, attrs){
+            $scope.social_url = '/social/login/'+ $scope.backend + '/';
+        },
+    }
 }]);
-
 navbar.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance' , 'Login', 'Auth',
 										function ($scope, $uibModalInstance, Login, Auth) {
 

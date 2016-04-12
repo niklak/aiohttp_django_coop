@@ -26,5 +26,7 @@ urlpatterns = [
         include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token-auth/', tokenviews.obtain_auth_token,
         name='api-token-auth'),
-    url(r'^chat/', include('chat.urls', namespace='chat'))
+    url(r'^chat/', include('chat.urls', namespace='chat')),
+    url(r'social/',
+        include('social.apps.django_app.urls', namespace='social')),
 ]

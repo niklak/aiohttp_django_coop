@@ -18,12 +18,12 @@ auth.factory('Logout', ['$resource',
 auth.factory('Auth', ['$cookies', function($cookies){
 	var auth = {};
 	auth.get = function(key){
-		return $cookies.getObject(key) ? $cookies.getObject(key) : null;
+		return $cookies.get(key) ? $cookies.get(key) : null;
 	};
 	auth.set = function(token, username, id){
-		$cookies.putObject('token', token);
-		$cookies.putObject('l', username);
-		$cookies.putObject('id', id);
+		$cookies.put('token', token);
+		$cookies.put('l', username);
+		$cookies.put('id', id);
 		this.refresh();
 	};
 	auth.refresh = function(){

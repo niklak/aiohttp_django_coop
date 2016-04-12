@@ -67,9 +67,7 @@ async def get_app():
     app['db'] = await aiopg.connect(**db_config)
     app['waiters'] = defaultdict(BList)
 
-    app.on_shutdown.append(close_websockets)
-    app.on_shutdown.append(close_redis)
-    app.on_shutdown.append(close_db)
+    app.on_shutdown.extend((close_websockets, close_redis, close_db))
 
     return app
 

@@ -1,4 +1,6 @@
 from django.contrib.auth import logout, login
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import generics, mixins
@@ -72,3 +74,18 @@ def register_view(request):
     serializer.is_valid(raise_exception=True)
     return Response(status=201)
 
+
+@api_view(['GET', 'POST'])
+@permission_classes(())
+def logged_view(request):
+    user = request.user
+    if user.is_authenticated():
+        token, created = Token.objects.get_or_create(user=user)
+        # SET COOKIE HERE!!!
+        response = HttpResponseRedirect(reverse('index'))
+        response.set_cookie('token', token.key)
+        response.set_cookie('l', user.username)
+        response.set_cookie('id', user.id)
+        return response
+    else:
+        return Response(status=400)
