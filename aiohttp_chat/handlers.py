@@ -32,23 +32,31 @@ async def websocket_handler(request):
     db = request.app['db']
     token = request.match_info.get('token')
 
+    ws = web.WebSocketResponse(autoclose=False)
+    await ws.prepare(request)
+
+    async with db.cursor() as cur:
+        user = await get_user_by_token(cur, token)
+
+    try:
+        user_id, username = user
+    except TypeError:
+        log.ws_logger.error('Probably bad token is the reason why'
+                            ' you get None instead tuple.', exc_info=True)
+        await ws.close()
+        return ws
+
     channel = request.match_info.get('channel')
     channel_id = int(channel)
     channel_users = 'channels:{}:users'.format(channel)
 
     channel_waiters = request.app['waiters'][channel]
+    channel_waiters.append(ws)
 
     r = request.app['redis']
-    ws = web.WebSocketResponse(autoclose=False)
-    await ws.prepare(request)
 
-    channel_waiters.append(ws)
     try:
-        async with db.cursor() as cur:
-            user = await get_user_by_token(cur, token)
-        user_id, username = user
-
-        count = int(await r.zcount(channel_users))
+        count = int(await r.zcard(channel_users))
 
         await r.zadd(channel_users, count+1, username)
         users = await r.zrange(channel_users)
@@ -65,9 +73,6 @@ async def websocket_handler(request):
             elif msg.tp == web.MsgType.error:
                 logging.error('connection closed with exception {}'
                               .format(ws.exception()))
-    except TypeError:
-        log.ws_logger.error('Probably bad token is the reason why'
-                            ' you get None instead tuple.', exc_info=True)
     except:
         log.ws_logger.error('ERROR has been happened', exc_info=True)
     finally:

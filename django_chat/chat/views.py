@@ -7,6 +7,10 @@ from rest_framework import generics, mixins
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.models import Token
 
+from social.apps.django_app.utils import load_backend, load_strategy
+from social.backends.oauth import BaseOAuth1, BaseOAuth2
+from social.exceptions import AuthAlreadyAssociated
+
 from . import models, serializers
 # Create your views here.
 
@@ -89,3 +93,47 @@ def logged_view(request):
         return response
     else:
         return Response(status=400)
+
+
+@api_view(['POST'])
+@permission_classes(())
+def social_sign_up(request):
+    data = {}
+    status = 400
+    try:
+        provider = request.data['provider']
+        a_user = request.user if not request.user.is_anonymous() else None
+        strategy = load_strategy(request)
+        backend = load_backend(strategy=strategy, name=provider,
+                               redirect_uri=None)
+        if isinstance(backend, BaseOAuth1):
+            access_token = {
+                'oauth_token': request.data['access_token'],
+                'oauth_token_secret': request.data['access_token_secret'],
+            }
+        else:
+            # We assume that if our backend is not instance of BaseOAuth1,
+            # it is instance of BaseOAuth2
+            access_token = request.data['access_token']
+
+        user = backend.do_auth(access_token, user=a_user)
+
+        if user and user.is_active:
+            social_data = user.social_auth.get(provider=provider)
+            if social_data.extra_data['access_token']:
+                social_data.extra_data['access_token'] = access_token
+                social_data.save()
+
+        login(request, user)
+        print(user)
+        token, created = Token.objects.get_or_create(user=user)
+        data = {'username': user.username, 'id': user.id, 'token': token.key}
+        status = 200
+
+    except KeyError as k:
+        data['detail'] = ['{} parameter is missed'.format(k)]
+
+    except Exception as exc:
+        data['detail'] = [str(exc)]
+    finally:
+        return Response(data, status=status)
