@@ -35,12 +35,11 @@ class BList(list):
 
 async def get_app():
 
-    # Graceful shutdown actions
+    # Graceful cleanup and shutdown actions
 
     async def close_redis(app):
         log.server_logger.info('Closing redis connection')
         app['redis'].close()
-
 
     async def close_db(app):
         log.server_logger.info('Closing postgres connection')
@@ -51,12 +50,11 @@ async def get_app():
     async def close_websockets(app):
 
         for channel in app['waiters'].values():
-            for ws in channel:
+            while channel:
+                ws = channel.pop()
                 await ws.close(code=1000, message='Server shutdown')
 
-    middlewares = []
-
-    app = web.Application(middlewares=middlewares)
+    app = web.Application()
 
     router = app.router
     router.add_route('GET', '/chat/{channel}/{token}/',
@@ -67,7 +65,8 @@ async def get_app():
     app['db'] = await aiopg.connect(**db_config)
     app['waiters'] = defaultdict(BList)
 
-    app.on_shutdown.extend((close_websockets, close_redis, close_db))
+    app.on_shutdown.append(close_websockets)
+    app.on_cleanup.extend((close_db, close_redis))
 
     return app
 

@@ -77,12 +77,14 @@ async def websocket_handler(request):
         log.ws_logger.error('ERROR has been happened', exc_info=True)
     finally:
         # 2. Send message to all who remained at the channel with new user list
-        await ws.close()
-        log.ws_logger.info('Is WebSocket closed?: {}'.format(ws.closed))
-        channel_waiters.remove(ws)
+        if ws in channel_waiters:
+            await ws.close()
+            log.ws_logger.info('Is WebSocket closed?: {}'.format(ws.closed))
+            channel_waiters.remove(ws)
 
         await r.zrem(channel_users, username)
         users = await r.zrange(channel_users)
+
         channel_waiters.broadcast(json.dumps({'user_list': users}))
 
     return ws
