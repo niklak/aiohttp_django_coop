@@ -59,7 +59,7 @@ def login_view(request):
     serializer = AuthTokenSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     user = serializer.validated_data['user']
-    token, created = Token.objects.get_or_create(user=user)
+    token = Token.objects.get(user=user)
     login(request, user)
     return Response({'token': token.key,
                      'username': user.username, 'id': user.id})
@@ -84,7 +84,7 @@ def register_view(request):
 def logged_view(request):
     user = request.user
     if user.is_authenticated():
-        token, created = Token.objects.get_or_create(user=user)
+        token = Token.objects.get(user=user)
         # SET COOKIE HERE!!!
         response = HttpResponseRedirect(reverse('index'))
         response.set_cookie('token', token.key)
@@ -119,14 +119,13 @@ def social_sign_up(request):
         user = backend.do_auth(access_token, user=a_user)
 
         if user and user.is_active:
-            social_data = user.social_auth.get(provider=provider)
-            if social_data.extra_data['access_token']:
-                social_data.extra_data['access_token'] = access_token
-                social_data.save()
+            social = user.social_auth.get(provider=provider)
+            if social.extra_data['access_token']:
+                social.extra_data['access_token'] = access_token
+                social.save()
 
         login(request, user)
-        print(user)
-        token, created = Token.objects.get_or_create(user=user)
+        token = Token.objects.get(user=user)
         data = {'username': user.username, 'id': user.id, 'token': token.key}
         status = 200
 

@@ -1,8 +1,8 @@
 # User model
 SOCIAL_AUTH_USER_MODEL = 'auth.User'
 
-SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
-SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
+#SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
+#SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/chat/logged/'
 
@@ -40,11 +40,11 @@ SOCIAL_AUTH_PIPELINE = (
 # Redirects and urlopens
 SOCIAL_AUTH_SANITIZE_REDIRECTS = True
 
-#Admin
+# Admin
 SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'email']
 
 
-# Google
+# Google #
 # /google-oauth2/
 # https://console.developers.google.com/
 # Create app and oauth credentials, enable Google+ API
@@ -52,7 +52,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '370622391189-pp8q6el92t7htf5o1de3iqs7u9gude1t.a
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'OpXEjxE8TJOiMX1mnzkGhSSq'
 
 
-# Facebook
+# Facebook #
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
   'locale': 'ru_RU',
   'fields': 'id, name, email',
@@ -63,11 +63,11 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_KEY = '230287217332547'
 SOCIAL_AUTH_FACEBOOK_SECRET = '57b9fdbe0c8f2b9e188587a1d9a6b70c'
 
-# VK
+# VK #
 
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 SOCIAL_AUTH_VK_OAUTH2_EXTRA_DATA = ['email']
 # Keys
 SOCIAL_AUTH_VK_OAUTH2_KEY = '5420072'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'b2nH47WWxgOoORpAVljQ'
-SOCIAL_AUTH_VK_API_VERSION = '5.5'
+SOCIAL_AUTH_VK_OAUTH2_API_VERSION = '5.5'
