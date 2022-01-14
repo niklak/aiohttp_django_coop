@@ -6,7 +6,7 @@ aioredis==0.2.5
 chardet==2.3.0
 Django==1.11.28
 django-debug-toolbar==1.4
-django-filter==0.12.0
+django-filter==2.4.0
 django-redis-cache==1.6.5
 djangorestframework==3.3.2
 hiredis==0.2.0
